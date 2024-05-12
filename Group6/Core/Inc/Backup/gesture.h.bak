@@ -1,0 +1,610 @@
+
+    // !!! This file is generated using emlearn !!!
+
+
+
+EmlTreesNode gesture_nodes[106] = {
+  { 175, 0.22299999743700027, 1, 13 },
+  { 131, 4.552999973297119, 2, 11 },
+  { 186, 0.34950000047683716, 3, 10 },
+  { 75, 2.9959999918937683, 4, 7 },
+  { 47, 108.27099990844727, 5, 6 },
+  { -1, 0, -1, -1 },
+  { -1, 2, -1, -1 },
+  { (uint8_t)277, 0.07650000043213367, 8, 9 },
+  { -1, 1, -1, -1 },
+  { -1, 3, -1, -1 },
+  { 114, -0.0195000022649765, 6, 9 },
+  { 15, 45.278499603271484, 9, 12 },
+  { 60, 0.6565000116825104, 5, 9 },
+  { 101, -103.25199890136719, 6, 14 },
+  { 5, -11.187000274658203, 15, 17 },
+  { 172, -9.412000179290771, 16, 9 },
+  { 136, 20.331998825073242, 6, 8 },
+  { 169, 0.26899999380111694, 6, 8 },
+  { 137, -8.083999872207642, 19, 20 },
+  { 122, 1.3224999904632568, 6, 8 },
+  { 195, -65.88200187683105, 8, 21 },
+  { 3, 90.65249633789062, 22, 5 },
+  { (uint8_t)288, 0.23149999976158142, 23, 9 },
+  { 70, -7.046000111848116, 6, 5 },
+  { 220, 41.49650001525879, 25, 34 },
+  { 57, -67.83199882507324, 26, 33 },
+  { 41, 13.923500061035156, 27, 32 },
+  { 117, 38.7710018157959, 28, 31 },
+  { 222, 0.2409999966621399, 5, 29 },
+  { 40, -21.003499269485474, 9, 30 },
+  { 167, -88.09499740600586, 6, 8 },
+  { (uint8_t)295, 0.2995000034570694, 8, 6 },
+  { 145, 0.1964999958872795, 5, 6 },
+  { 90, -0.038999998942017555, 6, 9 },
+  { 119, -67.58799934387207, 6, 8 },
+  { 113, -77.44649887084961, 6, 36 },
+  { (uint8_t)288, 0.13250000029802322, 37, 39 },
+  { (uint8_t)276, 0.1849999949336052, 38, 5 },
+  { (uint8_t)295, 0.2939999997615814, 8, 6 },
+  { 51, -75.53050231933594, 40, 41 },
+  { 195, 21.900999546051025, 5, 9 },
+  { (uint8_t)282, 0.20399999618530273, 42, 9 },
+  { 107, 7.297500371932983, 5, 9 },
+  { 137, -77.7135009765625, 6, 44 },
+  { 201, -38.25949954986572, 8, 45 },
+  { (uint8_t)264, 0.2785000056028366, 46, 50 },
+  { 179, 6.614500164985657, 47, 49 },
+  { 133, 0.17949999868869781, 5, 48 },
+  { 223, 0.15650000423192978, 8, 6 },
+  { (uint8_t)295, 0.23549999296665192, 9, 6 },
+  { 69, -128.72900009155273, 5, 9 },
+  { 189, -98.25600051879883, 52, 53 },
+  { 150, 0.9280000030994415, 8, 6 },
+  { 63, -92.6415023803711, 54, 56 },
+  { 101, -71.39299964904785, 6, 55 },
+  { 82, -61.007999420166016, 8, 5 },
+  { 58, 112.26350021362305, 57, 6 },
+  { 246, 0.17599999904632568, 58, 59 },
+  { 221, -2.4730000495910645, 8, 5 },
+  { (uint8_t)294, 0.2175000011920929, 5, 9 },
+  { 175, 0.3245000094175339, 61, 68 },
+  { 51, -70.33599853515625, 62, 65 },
+  { 207, 7.2215001583099365, 63, 64 },
+  { 170, 0.8844999969005585, 8, 5 },
+  { 119, 7.3434998989105225, 6, 9 },
+  { 87, -66.1294994354248, 66, 67 },
+  { (uint8_t)264, 0.2069999948143959, 5, 6 },
+  { 96, -0.3914999905973673, 8, 9 },
+  { 137, -79.96199989318848, 6, 69 },
+  { 5, -6.767499685287476, 70, 72 },
+  { 34, 134.0759983062744, 71, 6 },
+  { 103, 0.5275000259280205, 8, 9 },
+  { (uint8_t)283, 0.2849999964237213, 8, 6 },
+  { 125, -59.954002380371094, 6, 74 },
+  { 181, 0.3149999976158142, 75, 83 },
+  { 79, 0.33550000190734863, 76, 80 },
+  { 209, 4.996500015258789, 77, 79 },
+  { 130, -16.870500087738037, 6, 78 },
+  { 93, 62.86649990081787, 5, 8 },
+  { 2, 0.7065000236034393, 6, 9 },
+  { 119, -0.2094999998807907, 81, 9 },
+  {(uint8_t) 271, 0.06499999947845936, 8, 82 },
+  { 207, 1.762999951839447, 5, 6 },
+  { 9, 17.896999835968018, 9, 84 },
+  { 189, -52.90850043296814, 8, 6 },
+  { 131, -8.656500101089478, 86, 87 },
+  { 141, -71.58399772644043, 8, 6 },
+  { 201, -38.25949954986572, 8, 88 },
+  { 125, 6.309499979019165, 89, 91 },
+  { 150, 0.36399999260902405, 5, 90 },
+  { 29, -48.60699939727783, 6, 9 },
+  { 81, -63.00750160217285, 92, 94 },
+  { (uint8_t)279, -12.923999786376953, 93, 5 },
+  { (uint8_t)259, -0.0410000029951334, 9, 8 },
+  { 32, 2.134500026702881, 9, 5 },
+  { 171, -43.33600044250488, 96, 97 },
+  { (uint8_t)276, 0.23499999195337296, 8, 6 },
+  { 113, -77.44649887084961, 6, 98 },
+  { 51, -74.46950149536133, 99, 101 },
+  { 187, 0.19600000232458115, 5, 100 },
+  { 1, -0.03700000047683716, 9, 8 },
+  { 93, -60.65250015258789, 102, 104 },
+  { 212, 1.0180000066757202, 103, 5 },
+  { 37, 0.5450000017881393, 8, 6 },
+  { 141, -7.011500060558319, 105, 9 },
+  { 209, -0.2785000056028366, 8, 6 } 
+};
+
+int32_t gesture_tree_roots[10] = { 0, 18, 24, 35, 43, 51, 60, 73, 85, 95 };
+
+
+EmlTrees gesture = {
+        106,
+        gesture_nodes,	  
+        10,
+        gesture_tree_roots,
+    };
+
+static inline int32_t gesture_predict_tree_0(const float *features, int32_t features_length) {
+          if (features[175] < 0.22299999743700027) {
+              if (features[131] < 4.552999973297119) {
+                  if (features[186] < 0.34950000047683716) {
+                      if (features[75] < 2.9959999918937683) {
+                          if (features[47] < 108.27099990844727) {
+                              return 0;
+                          } else {
+                              return 2;
+                          }
+                      } else {
+                          if (features[277] < 0.07650000043213367) {
+                              return 1;
+                          } else {
+                              return 3;
+                          }
+                      }
+                  } else {
+                      if (features[114] < -0.0195000022649765) {
+                          return 2;
+                      } else {
+                          return 3;
+                      }
+                  }
+              } else {
+                  if (features[15] < 45.278499603271484) {
+                      return 3;
+                  } else {
+                      if (features[60] < 0.6565000116825104) {
+                          return 0;
+                      } else {
+                          return 3;
+                      }
+                  }
+              }
+          } else {
+              if (features[101] < -103.25199890136719) {
+                  return 2;
+              } else {
+                  if (features[5] < -11.187000274658203) {
+                      if (features[172] < -9.412000179290771) {
+                          if (features[136] < 20.331998825073242) {
+                              return 2;
+                          } else {
+                              return 1;
+                          }
+                      } else {
+                          return 3;
+                      }
+                  } else {
+                      if (features[169] < 0.26899999380111694) {
+                          return 2;
+                      } else {
+                          return 1;
+                      }
+                  }
+              }
+          }
+        }
+        
+
+static inline int32_t gesture_predict_tree_1(const float *features, int32_t features_length) {
+          if (features[137] < -8.083999872207642) {
+              if (features[122] < 1.3224999904632568) {
+                  return 2;
+              } else {
+                  return 1;
+              }
+          } else {
+              if (features[195] < -65.88200187683105) {
+                  return 1;
+              } else {
+                  if (features[3] < 90.65249633789062) {
+                      if (features[288] < 0.23149999976158142) {
+                          if (features[70] < -7.046000111848116) {
+                              return 2;
+                          } else {
+                              return 0;
+                          }
+                      } else {
+                          return 3;
+                      }
+                  } else {
+                      return 0;
+                  }
+              }
+          }
+        }
+        
+
+static inline int32_t gesture_predict_tree_2(const float *features, int32_t features_length) {
+          if (features[220] < 41.49650001525879) {
+              if (features[57] < -67.83199882507324) {
+                  if (features[41] < 13.923500061035156) {
+                      if (features[117] < 38.7710018157959) {
+                          if (features[222] < 0.2409999966621399) {
+                              return 0;
+                          } else {
+                              if (features[40] < -21.003499269485474) {
+                                  return 3;
+                              } else {
+                                  if (features[167] < -88.09499740600586) {
+                                      return 2;
+                                  } else {
+                                      return 1;
+                                  }
+                              }
+                          }
+                      } else {
+                          if (features[295] < 0.2995000034570694) {
+                              return 1;
+                          } else {
+                              return 2;
+                          }
+                      }
+                  } else {
+                      if (features[145] < 0.1964999958872795) {
+                          return 0;
+                      } else {
+                          return 2;
+                      }
+                  }
+              } else {
+                  if (features[90] < -0.038999998942017555) {
+                      return 2;
+                  } else {
+                      return 3;
+                  }
+              }
+          } else {
+              if (features[119] < -67.58799934387207) {
+                  return 2;
+              } else {
+                  return 1;
+              }
+          }
+        }
+        
+
+static inline int32_t gesture_predict_tree_3(const float *features, int32_t features_length) {
+          if (features[113] < -77.44649887084961) {
+              return 2;
+          } else {
+              if (features[288] < 0.13250000029802322) {
+                  if (features[276] < 0.1849999949336052) {
+                      if (features[295] < 0.2939999997615814) {
+                          return 1;
+                      } else {
+                          return 2;
+                      }
+                  } else {
+                      return 0;
+                  }
+              } else {
+                  if (features[51] < -75.53050231933594) {
+                      if (features[195] < 21.900999546051025) {
+                          return 0;
+                      } else {
+                          return 3;
+                      }
+                  } else {
+                      if (features[282] < 0.20399999618530273) {
+                          if (features[107] < 7.297500371932983) {
+                              return 0;
+                          } else {
+                              return 3;
+                          }
+                      } else {
+                          return 3;
+                      }
+                  }
+              }
+          }
+        }
+        
+
+static inline int32_t gesture_predict_tree_4(const float *features, int32_t features_length) {
+          if (features[137] < -77.7135009765625) {
+              return 2;
+          } else {
+              if (features[201] < -38.25949954986572) {
+                  return 1;
+              } else {
+                  if (features[264] < 0.2785000056028366) {
+                      if (features[179] < 6.614500164985657) {
+                          if (features[133] < 0.17949999868869781) {
+                              return 0;
+                          } else {
+                              if (features[223] < 0.15650000423192978) {
+                                  return 1;
+                              } else {
+                                  return 2;
+                              }
+                          }
+                      } else {
+                          if (features[295] < 0.23549999296665192) {
+                              return 3;
+                          } else {
+                              return 2;
+                          }
+                      }
+                  } else {
+                      if (features[69] < -128.72900009155273) {
+                          return 0;
+                      } else {
+                          return 3;
+                      }
+                  }
+              }
+          }
+        }
+        
+
+static inline int32_t gesture_predict_tree_5(const float *features, int32_t features_length) {
+          if (features[189] < -98.25600051879883) {
+              if (features[150] < 0.9280000030994415) {
+                  return 1;
+              } else {
+                  return 2;
+              }
+          } else {
+              if (features[63] < -92.6415023803711) {
+                  if (features[101] < -71.39299964904785) {
+                      return 2;
+                  } else {
+                      if (features[82] < -61.007999420166016) {
+                          return 1;
+                      } else {
+                          return 0;
+                      }
+                  }
+              } else {
+                  if (features[58] < 112.26350021362305) {
+                      if (features[246] < 0.17599999904632568) {
+                          if (features[221] < -2.4730000495910645) {
+                              return 1;
+                          } else {
+                              return 0;
+                          }
+                      } else {
+                          if (features[294] < 0.2175000011920929) {
+                              return 0;
+                          } else {
+                              return 3;
+                          }
+                      }
+                  } else {
+                      return 2;
+                  }
+              }
+          }
+        }
+        
+
+static inline int32_t gesture_predict_tree_6(const float *features, int32_t features_length) {
+          if (features[175] < 0.3245000094175339) {
+              if (features[51] < -70.33599853515625) {
+                  if (features[207] < 7.2215001583099365) {
+                      if (features[170] < 0.8844999969005585) {
+                          return 1;
+                      } else {
+                          return 0;
+                      }
+                  } else {
+                      if (features[119] < 7.3434998989105225) {
+                          return 2;
+                      } else {
+                          return 3;
+                      }
+                  }
+              } else {
+                  if (features[87] < -66.1294994354248) {
+                      if (features[264] < 0.2069999948143959) {
+                          return 0;
+                      } else {
+                          return 2;
+                      }
+                  } else {
+                      if (features[96] < -0.3914999905973673) {
+                          return 1;
+                      } else {
+                          return 3;
+                      }
+                  }
+              }
+          } else {
+              if (features[137] < -79.96199989318848) {
+                  return 2;
+              } else {
+                  if (features[5] < -6.767499685287476) {
+                      if (features[34] < 134.0759983062744) {
+                          if (features[103] < 0.5275000259280205) {
+                              return 1;
+                          } else {
+                              return 3;
+                          }
+                      } else {
+                          return 2;
+                      }
+                  } else {
+                      if (features[283] < 0.2849999964237213) {
+                          return 1;
+                      } else {
+                          return 2;
+                      }
+                  }
+              }
+          }
+        }
+        
+
+static inline int32_t gesture_predict_tree_7(const float *features, int32_t features_length) {
+          if (features[125] < -59.954002380371094) {
+              return 2;
+          } else {
+              if (features[181] < 0.3149999976158142) {
+                  if (features[79] < 0.33550000190734863) {
+                      if (features[209] < 4.996500015258789) {
+                          if (features[130] < -16.870500087738037) {
+                              return 2;
+                          } else {
+                              if (features[93] < 62.86649990081787) {
+                                  return 0;
+                              } else {
+                                  return 1;
+                              }
+                          }
+                      } else {
+                          if (features[2] < 0.7065000236034393) {
+                              return 2;
+                          } else {
+                              return 3;
+                          }
+                      }
+                  } else {
+                      if (features[119] < -0.2094999998807907) {
+                          if (features[271] < 0.06499999947845936) {
+                              return 1;
+                          } else {
+                              if (features[207] < 1.762999951839447) {
+                                  return 0;
+                              } else {
+                                  return 2;
+                              }
+                          }
+                      } else {
+                          return 3;
+                      }
+                  }
+              } else {
+                  if (features[9] < 17.896999835968018) {
+                      return 3;
+                  } else {
+                      if (features[189] < -52.90850043296814) {
+                          return 1;
+                      } else {
+                          return 2;
+                      }
+                  }
+              }
+          }
+        }
+        
+
+static inline int32_t gesture_predict_tree_8(const float *features, int32_t features_length) {
+          if (features[131] < -8.656500101089478) {
+              if (features[141] < -71.58399772644043) {
+                  return 1;
+              } else {
+                  return 2;
+              }
+          } else {
+              if (features[201] < -38.25949954986572) {
+                  return 1;
+              } else {
+                  if (features[125] < 6.309499979019165) {
+                      if (features[150] < 0.36399999260902405) {
+                          return 0;
+                      } else {
+                          if (features[29] < -48.60699939727783) {
+                              return 2;
+                          } else {
+                              return 3;
+                          }
+                      }
+                  } else {
+                      if (features[81] < -63.00750160217285) {
+                          if (features[279] < -12.923999786376953) {
+                              if (features[259] < -0.0410000029951334) {
+                                  return 3;
+                              } else {
+                                  return 1;
+                              }
+                          } else {
+                              return 0;
+                          }
+                      } else {
+                          if (features[32] < 2.134500026702881) {
+                              return 3;
+                          } else {
+                              return 0;
+                          }
+                      }
+                  }
+              }
+          }
+        }
+        
+
+static inline int32_t gesture_predict_tree_9(const float *features, int32_t features_length) {
+          if (features[171] < -43.33600044250488) {
+              if (features[276] < 0.23499999195337296) {
+                  return 1;
+              } else {
+                  return 2;
+              }
+          } else {
+              if (features[113] < -77.44649887084961) {
+                  return 2;
+              } else {
+                  if (features[51] < -74.46950149536133) {
+                      if (features[187] < 0.19600000232458115) {
+                          return 0;
+                      } else {
+                          if (features[1] < -0.03700000047683716) {
+                              return 3;
+                          } else {
+                              return 1;
+                          }
+                      }
+                  } else {
+                      if (features[93] < -60.65250015258789) {
+                          if (features[212] < 1.0180000066757202) {
+                              if (features[37] < 0.5450000017881393) {
+                                  return 1;
+                              } else {
+                                  return 2;
+                              }
+                          } else {
+                              return 0;
+                          }
+                      } else {
+                          if (features[141] < -7.011500060558319) {
+                              if (features[209] < -0.2785000056028366) {
+                                  return 1;
+                              } else {
+                                  return 2;
+                              }
+                          } else {
+                              return 3;
+                          }
+                      }
+                  }
+              }
+          }
+        }
+        
+
+int32_t gesture_predict(const float *features, int32_t features_length) {
+
+        int32_t votes[4] = {0,};
+        int32_t _class = -1;
+
+        _class = gesture_predict_tree_0(features, features_length); votes[_class] += 1;
+    _class = gesture_predict_tree_1(features, features_length); votes[_class] += 1;
+    _class = gesture_predict_tree_2(features, features_length); votes[_class] += 1;
+    _class = gesture_predict_tree_3(features, features_length); votes[_class] += 1;
+    _class = gesture_predict_tree_4(features, features_length); votes[_class] += 1;
+    _class = gesture_predict_tree_5(features, features_length); votes[_class] += 1;
+    _class = gesture_predict_tree_6(features, features_length); votes[_class] += 1;
+    _class = gesture_predict_tree_7(features, features_length); votes[_class] += 1;
+    _class = gesture_predict_tree_8(features, features_length); votes[_class] += 1;
+    _class = gesture_predict_tree_9(features, features_length); votes[_class] += 1;
+    
+        int32_t most_voted_class = -1;
+        int32_t most_voted_votes = 0;
+        for (int32_t i=0; i<4; i++) {
+
+            if (votes[i] > most_voted_votes) {
+                most_voted_class = i;
+                most_voted_votes = votes[i];
+            }
+        }
+        return most_voted_class;
+    }
+    

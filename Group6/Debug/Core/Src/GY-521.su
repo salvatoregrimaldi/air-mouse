@@ -1,0 +1,11 @@
+../Core/Src/GY-521.c:52:9:GY521_Init	48	static
+../Core/Src/GY-521.c:89:6:GY521_convertGyr	16	static
+../Core/Src/GY-521.c:104:6:GY521_convertAcc	16	static
+../Core/Src/GY-521.c:119:6:GY521_readAccel	32	static
+../Core/Src/GY-521.c:130:6:GY521_readGyro	32	static
+../Core/Src/GY-521.c:142:6:GY521_readAll	32	static
+../Core/Src/GY-521.c:155:8:GY521_getPitch	40	static
+../Core/Src/GY-521.c:173:8:GY521_getRoll	40	static
+../Core/Src/GY-521.c:189:6:GY521_readAccelIT	24	static
+../Core/Src/GY-521.c:198:6:GY521_readGyroIT	24	static
+../Core/Src/GY-521.c:207:6:GY521_readAllIT	24	static

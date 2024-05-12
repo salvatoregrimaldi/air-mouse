@@ -1,0 +1,26 @@
+/*
+ * Settings.h
+ *
+ *  Created on: 30 giu 2022
+ *      Author: duino
+ */
+
+#ifndef INC_SETTINGS_H_
+#define INC_SETTINGS_H_
+
+#include "UART.h"
+#include "mpu6050.h"
+
+typedef struct {
+	float maxStopAngle;
+	int maxSpeedMouse;
+	float maxSpeedAngleX;
+	float maxSpeedAngleY;
+} Settings;
+
+void Settings_Init(Settings* settings);
+void Settings_calibrateStopAngle(Settings* settings, MPU6050* mpu6050, UARTCom* serial);
+void Settings_setMaxSpeedMouse(Settings* settings, UARTCom* serial);
+void Settings_calibrateMaxSpeedAngle(Settings* settings, MPU6050* mpu6050, UARTCom* serial, int pitchRoll);
+
+#endif /* INC_SETTINGS_H_ */

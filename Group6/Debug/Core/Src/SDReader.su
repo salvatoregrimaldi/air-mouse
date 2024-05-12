@@ -1,0 +1,4 @@
+../Core/Src/SDReader.c:38:9:SdReader_Init	32	static
+../Core/Src/SDReader.c:59:9:_SdReader_setDateTime	40	static
+../Core/Src/SDReader.c:73:9:SdReader_closeFile	16	static
+../Core/Src/SDReader.c:82:9:SdReader_writeOnFile	56	static

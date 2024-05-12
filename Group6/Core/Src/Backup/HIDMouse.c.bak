@@ -1,0 +1,82 @@
+#include "HIDMouse.h"
+#include "usbd_customhid.h"
+
+void HIDMouse_Init(HIDMouse* HIDmouse, USBD_HandleTypeDef* handler){
+	HIDmouse->handler=handler;
+	HIDmouse->leftButton=HIDMouse_ButtonReleased;
+	HIDmouse->rightButton=HIDMouse_ButtonReleased;
+	HIDmouse->middleButton=HIDMouse_ButtonReleased;
+
+	HIDmouse->wheel=0;
+	HIDmouse->XAxis=0;
+	HIDmouse->YAxis=0;
+}
+
+void _HIDMouse_send(HIDMouse* HIDmouse){
+	uint8_t buff[5]; /* 5 bytes long report */
+
+	/* Report ID */
+	buff[0] = 0x02; /* Mouse */
+
+	/* Set buttons */
+	buff[1] = 0;
+	buff[1] |= HIDmouse->leftButton << 0; /* Bit 0 */
+	buff[1] |= HIDmouse->rightButton << 1; /* Bit 1 */
+	buff[1] |= HIDmouse->middleButton << 2; /* Bit 2 */
+
+	/* Set X and Y offset */
+	buff[2] = HIDmouse->XAxis;
+	buff[3] = HIDmouse->YAxis;
+
+	/* Set wheel */
+	buff[4] = HIDmouse->wheel;
+
+	/* Send to USB */
+	USBD_CUSTOM_HID_SendReport(HIDmouse->handler, buff, 5);
+
+}
+
+int8_t HIDMouse_moveAndButtonSend(HIDMouse* HIDmouse, int8_t X, int8_t Y, int8_t wheel, HIDMouse_Button button, int8_t releaseButtons){
+	if(X<-127 || X>127 || Y<-127 || Y>127 || wheel<-127 || wheel>127)
+		return -1;
+
+	HIDmouse->leftButton=HIDMouse_ButtonReleased;
+	HIDmouse->rightButton=HIDMouse_ButtonReleased;
+	HIDmouse->middleButton=HIDMouse_ButtonReleased;
+
+	switch(button){
+		case HIDMouse_NULL:
+			break;
+		case HIDMouse_Right:
+			HIDmouse->rightButton=HIDMouse_ButtonPressed;
+			break;
+		case HIDMouse_Left:
+			HIDmouse->leftButton=HIDMouse_ButtonPressed;
+			break;
+		case HIDMouse_Middle:
+			HIDmouse->middleButton=HIDMouse_ButtonPressed;
+			break;
+	}
+
+	HIDmouse->XAxis=X;
+	HIDmouse->YAxis=Y;
+	HIDmouse->wheel=wheel;
+
+	_HIDMouse_send(HIDmouse);
+
+	if(button!=HIDMouse_NULL && releaseButtons==1){
+		HAL_Delay(15);
+
+		HIDmouse->leftButton=HIDMouse_ButtonReleased;
+		HIDmouse->rightButton=HIDMouse_ButtonReleased;
+		HIDmouse->middleButton=HIDMouse_ButtonReleased;
+
+		HIDmouse->XAxis=0;
+		HIDmouse->YAxis=0;
+		HIDmouse->wheel=0;
+
+		_HIDMouse_send(HIDmouse);
+	}
+
+	return 0;
+}

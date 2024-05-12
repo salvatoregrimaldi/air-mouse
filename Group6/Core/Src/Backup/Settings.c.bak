@@ -1,0 +1,133 @@
+/*
+ * Settings.c
+ *
+ *  Created on: 30 giu 2022
+ *      Author: duino
+ */
+
+
+#include "Settings.h"
+
+void Settings_Init(Settings* settings){
+	settings->maxStopAngle=10;
+	settings->maxSpeedMouse=6;
+	settings->maxSpeedAngleX=90;
+	settings->maxSpeedAngleY=90;
+}
+
+void Settings_calibrateStopAngle(Settings* settings, MPU6050* mpu6050, UARTCom* serial){
+	UARTCom_printf(serial, "Inizio calibrazione angolo massimo per cui il mouse risulterà a riposo\n");
+	int count=0;
+	float value;
+	for(;;){
+		MPU6050_readAll(mpu6050);
+		value=MPU6050_getPitch(mpu6050);
+		if(value>75)
+			count++;
+		else
+			count=0;
+
+		UARTCom_printf(serial, "%d\n",(int)value);
+
+		if(count==10)
+			break;
+		HAL_Delay(100);
+	}
+
+	count=0;
+
+	UARTCom_printf(serial, "Calibrazione iniziata!(Mettiti nel punto di movimento minimo)\n");
+	float minValue=0;
+	float value;
+	for(;;){
+		MPU6050_readAll(mpu6050);
+		value = (float) MPU6050_getPitch(mpu6050);
+		if(value>0)
+			minValue=value;
+
+		count++;
+
+		if(count==50)
+			break;
+
+		HAL_Delay(100);
+	}
+	settings->maxStopAngle=minValue;
+
+	UARTCom_printf(serial, "Calibrazione angolo terminata!\n");
+
+}
+
+void Settings_setMaxSpeedMouse(Settings* settings, UARTCom* serial){
+	UARTCom_printf(serial, "Scrivi un valore da 3 a 10 per la massima velocità del mouse\n");
+	int value=-1;
+	while(value<3 || value>10){
+		UARTCom_scanf(serial, "%d", &value);
+		if(value<3 || value>10)
+			UARTCom_printf(serial, "Valore invalido, ripeti\n");
+	}
+
+	settings->maxSpeedMouse=value;
+
+}
+
+void Settings_calibrateMaxSpeedAngle(Settings* settings, MPU6050* mpu6050, UARTCom* serial, int pitchRoll){ //Y=0
+	char choose;
+	if(pitchRoll==0)
+		choose='Y';
+	else
+		choose='X';
+
+	UARTCom_printf(serial, "Inizio calibrazione angolo %c con massima velocità\n",choose);
+
+	int count=0;
+	float value;
+	for(;;){
+		MPU6050_readAll(mpu6050);
+		if(pitchRoll==0)
+			value=MPU6050_getPitch(mpu6050);
+		else
+			value=MPU6050_getRoll(mpu6050);
+		UARTCom_printf(serial, "%d\n",(int)value);
+
+		if(value>75)
+			count++;
+		else
+			count=0;
+
+		if(count==10)
+			break;
+		HAL_Delay(100);
+	}
+
+	count=0;
+
+	UARTCom_printf(serial, "Calibrazione iniziata!(Mettiti nel punto di movimento massimo)\n");
+	float maxValue=0;
+
+	for(;;){
+		MPU6050_readAll(mpu6050);
+		if(pitchRoll==0)
+			value = (float) MPU6050_getPitch(mpu6050);
+		else
+			value = (float) MPU6050_getRoll(mpu6050);
+
+		if(value>settings->maxStopAngle)
+			maxValue=value;
+
+		count++;
+
+		if(count==50)
+			break;
+
+		HAL_Delay(100);
+	}
+	if(pitchRoll==0)
+		settings->maxSpeedAngleY=maxValue;
+	else
+		settings->maxSpeedAngleX=maxValue;
+
+	UARTCom_printf(serial, "Calibrazione angolo %c terminata!\n",choose);
+
+}
+

@@ -1,0 +1,6 @@
+../Core/Src/Settings.c:12:6:Settings_Init	16	static
+../Core/Src/Settings.c:20:6:Settings_calibrateStopAngle	40	static
+../Core/Src/Settings.c:63:6:Settings_setMaxSpeedMouse	24	static
+../Core/Src/Settings.c:76:6:Settings_calibrateMaxSpeedAngle	40	static
+../Core/Src/Settings.c:136:6:Settings_setDatetime	136	static
+../Core/Src/Settings.c:153:6:Settings_setGestureThreshold	24	static

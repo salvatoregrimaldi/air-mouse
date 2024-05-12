@@ -1,0 +1,38 @@
+/*
+ * ds3231.h
+ */
+
+#ifndef INC_DS3231_H_
+#define INC_DS3231_H_
+
+#include "i2c.h"
+#include "Datetime.h"
+
+
+#define DS3231_DEF_ADDR 0xD0
+
+typedef struct {
+	I2C_HandleTypeDef* i2cPort;
+	uint16_t address;
+	uint8_t _rawDateTime[7];
+	uint8_t _rawTemp[2];
+
+} DS3231;
+
+void DS3231_Init(DS3231* ds3231, I2C_HandleTypeDef* i2cPort, uint16_t address);
+uint8_t* DS3231_getRawDateTime(DS3231 *ds3231);
+uint8_t* DS3231_getRawTemp(DS3231 *ds3231);
+
+void DS3231_setDateTime (DS3231* ds3231, DateTime dateTime);
+void DS3231_setDateTimeIT (DS3231* ds3231, DateTime dateTime);
+DateTime DS3231_getDateTime (DS3231* ds3231);
+void DS3231_getDateTimeIT (DS3231* ds3231);
+float DS3231_getTemp (DS3231* ds3231);
+void DS3231_getTempIT(DS3231 *ds3231);
+
+uint8_t _DS3231_decToBcd(int16_t val);
+int16_t _DS3231_bcdToDec(uint8_t val);
+DateTime DS3231_convertRawDTtoDT(uint8_t* gDateTime);
+float DS3231_convertRawTtoT(uint8_t* temp);
+
+#endif /* INC_DS3231_H_ */

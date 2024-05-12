@@ -1,0 +1,445 @@
+/* USER CODE BEGIN Header */
+/**
+ ******************************************************************************
+ * File Name          : freertos.c
+ * Description        : Code for freertos applications
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
+/* USER CODE END Header */
+
+/* Includes ------------------------------------------------------------------*/
+#include "string.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "main.h"
+#include "cmsis_os.h"
+
+#include "Ds3231.h"
+#include "HIDKeyboard.h"
+#include "HIDMouse.h"
+#include "mpu6050.h"
+#include "usb_device.h"
+#include "gestures.h"
+#include "usart.h"
+#include "UART.h"
+
+#include "fatfs.h"
+#include "spi.h"
+#include "gpio.h"
+#include "SDCard.h"
+
+#include "Settings.h"
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+/* USER CODE BEGIN Variables */
+
+/* USER CODE END Variables */
+/* Definitions for defaultTask */
+osThreadId_t defaultTaskHandle;
+const osThreadAttr_t defaultTask_attributes = {
+  .name = "defaultTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for movementTask */
+osThreadId_t movementTaskHandle;
+const osThreadAttr_t movementTask_attributes = {
+  .name = "movementTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityRealtime,
+};
+/* Definitions for gestureTask */
+osThreadId_t gestureTaskHandle;
+const osThreadAttr_t gestureTask_attributes = {
+  .name = "gestureTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityRealtime,
+};
+/* Definitions for logsTask */
+osThreadId_t logsTaskHandle;
+const osThreadAttr_t logsTask_attributes = {
+  .name = "logsTask",
+  .stack_size = 2000 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for settingsTask */
+osThreadId_t settingsTaskHandle;
+const osThreadAttr_t settingsTask_attributes = {
+  .name = "settingsTask",
+  .stack_size = 512 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for logsQueue */
+osMessageQueueId_t logsQueueHandle;
+const osMessageQueueAttr_t logsQueue_attributes = {
+  .name = "logsQueue"
+};
+/* Definitions for mutexHID */
+osMutexId_t mutexHIDHandle;
+const osMutexAttr_t mutexHID_attributes = {
+  .name = "mutexHID"
+};
+
+osMutexId_t mutex1Handle;
+const osMutexAttr_t mutex1_attributes = {
+  .name = "mutex1"
+};
+
+/* Private function prototypes -----------------------------------------------*/
+/* USER CODE BEGIN FunctionPrototypes */
+
+/* USER CODE END FunctionPrototypes */
+
+void StartDefaultTask(void *argument);
+void movementHandler(void *argument);
+void gestureHandler(void *argument);
+void logsHandler(void *argument);
+void settingsHandler(void *argument);
+
+extern void MX_USB_DEVICE_Init(void);
+void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
+
+uint32_t MAP(uint32_t au32_IN, uint32_t au32_INmin, uint32_t au32_INmax,
+		uint32_t au32_OUTmin, uint32_t au32_OUTmax) {
+	return ((((au32_IN - au32_INmin) * (au32_OUTmax - au32_OUTmin))
+			/ (au32_INmax - au32_INmin)) + au32_OUTmin);
+}
+
+
+DS3231 ds3231;
+MPU6050 mpu6050Move;
+MPU6050 mpu6050Gest;
+HIDKeyboard testKeyBoard;
+HIDMouse testMouse;
+int valx = 0, valy = 0, count = 0;
+double pitch, roll, oldPitch, oldRoll;
+char out[50];
+FATFS FatFs;
+FRESULT fres;
+SdCard sdCard;
+UARTCom uartC;
+Settings settings;
+
+/**
+  * @brief  FreeRTOS initialization
+  * @param  None
+  * @retval None
+  */
+void MX_FREERTOS_Init(void) {
+  /* USER CODE BEGIN Init */
+	DS3231_Init(&ds3231, &hi2c3, DS3231_DEF_ADDR);
+	MPU6050_Init(&mpu6050Move, &hi2c1, MPU6050_DEF_ADDR1);
+	MPU6050_Init(&mpu6050Gest, &hi2c1, MPU6050_DEF_ADDR2);
+	HIDKeyboard_Init(&testKeyBoard, &hUsbDeviceFS);
+	HIDMouse_Init(&testMouse, &hUsbDeviceFS);
+	UARTCom_Init(&uartC, &huart2);
+	Settings_Init(&settings);
+
+  /* USER CODE END Init */
+  /* Create the mutex(es) */
+  /* creation of mutexHID */
+  mutexHIDHandle = osMutexNew(&mutexHID_attributes);
+  mutex1Handle = osMutexNew(&mutex1_attributes);
+  /* USER CODE BEGIN RTOS_MUTEX */
+	/* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+	/* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+	/* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* Create the queue(s) */
+  /* creation of logsQueue */
+  logsQueueHandle = osMessageQueueNew (10, 100, &logsQueue_attributes);
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+	/* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* creation of defaultTask */
+  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+
+  /* creation of movementTask */
+  movementTaskHandle = osThreadNew(movementHandler, NULL, &movementTask_attributes);
+
+  /* creation of gestureTask */
+  gestureTaskHandle = osThreadNew(gestureHandler, NULL, &gestureTask_attributes);
+
+  /* creation of logsTask */
+  logsTaskHandle = osThreadNew(logsHandler, NULL, &logsTask_attributes);
+
+  /* creation of settingsTask */
+  settingsTaskHandle = osThreadNew(settingsHandler, NULL, &settingsTask_attributes);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+	/* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_EVENTS */
+	/* add events, ... */
+  /* USER CODE END RTOS_EVENTS */
+
+}
+
+/* USER CODE BEGIN Header_StartDefaultTask */
+/**
+ * @brief  Function implementing the defaultTask thread.
+ * @param  argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_StartDefaultTask */
+void StartDefaultTask(void *argument)
+{
+  /* init code for USB_DEVICE */
+  MX_USB_DEVICE_Init();
+  /* USER CODE BEGIN StartDefaultTask */
+	/* Infinite loop */
+	for (;;) {
+		osDelay(1);
+	}
+  /* USER CODE END StartDefaultTask */
+}
+
+/* USER CODE BEGIN Header_movementHandler */
+/**
+ * @brief Function implementing the movementTask thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_movementHandler */
+void movementHandler(void *argument)
+{
+  /* USER CODE BEGIN movementHandler */
+	/* Infinite loop */
+
+	for (;;) {
+
+		MPU6050_readAll(&mpu6050Move);
+		pitch = MPU6050_getPitch(&mpu6050Move);
+		roll = MPU6050_getRoll(&mpu6050Move);
+
+		if (oldPitch == pitch && oldRoll == roll)
+			count++;
+		else
+			count = 0;
+
+		oldPitch = pitch;
+		oldRoll = roll;
+
+		if (count == 20) {
+			MPU6050_Init(&mpu6050Move, &hi2c1, MPU6050_DEF_ADDR1);
+			count = 0;
+		}
+
+		if (pitch > 10) {
+			valy = -MAP((int) pitch, 0, 90, 0, 8);
+		} else if (pitch < -10) {
+			valy = MAP((int) -pitch, 0, 90, 0, 8);
+		} else
+			valy = 0;
+
+		if (roll > 10) {
+			valx = -MAP((int) roll, 0, 90, 0, 8);
+		} else if (roll < -10) {
+			valx = MAP((int) -roll, 0, 90, 0, 8);
+		} else
+			valx = 0;
+
+		if (valx != 0 || valy != 0) {
+			osMutexAcquire(mutexHIDHandle, osWaitForever);
+			HIDMouse_moveAndButtonSend(&testMouse, valy, valx, 0, HIDMouse_NULL, 0);
+			osDelay(15);
+			osMutexRelease(mutexHIDHandle);
+		} else
+			osDelay(10);
+
+		if(osMutexGetOwner(mutex1Handle)==settingsTaskHandle){
+			osMutexAcquire(mutex1Handle, osWaitForever);
+			osMutexRelease(mutex1Handle);
+		}
+
+	}
+  /* USER CODE END movementHandler */
+}
+
+/* USER CODE BEGIN Header_gestureHandler */
+/**
+ * @brief Function implementing the gestureTask thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_gestureHandler */
+void gestureHandler(void *argument)
+{
+  /* USER CODE BEGIN gestureHandler */
+	/* Infinite loop */
+
+	for (;;) {
+
+		MPU6050_readAll(&mpu6050Gest);
+
+		float aSum = fabs(mpu6050Gest.Ax) + fabs(mpu6050Gest.Ay)
+				+ fabs(mpu6050Gest.Az);
+		int res = -1;
+
+		if (aSum >= 4) {
+			res = recognize_gesture(&mpu6050Gest, 50);
+			//sprintf(out, "%d %d %d %d\r\n",res,(int)mpu6050Gest.Ax,(int)mpu6050Gest.Ay,(int)mpu6050Gest.Az);
+			//HAL_UART_Transmit(&huart2, (uint8_t*) out, strlen(out), HAL_MAX_DELAY);
+		}
+
+		if (res != -1) {
+			osMutexAcquire(mutexHIDHandle, osWaitForever);
+			if (res == 0) {
+				HIDMouse_moveAndButtonSend(&testMouse, 0, 0, 0, HIDMouse_Left, 1);
+				//sprintf(out, "Send\r\n");
+				//HAL_UART_Transmit(&huart2, (uint8_t*) out, strlen(out), HAL_MAX_DELAY);
+			} else if (res == 1) {
+				HIDMouse_moveAndButtonSend(&testMouse, 0, 0, 0, HIDMouse_Left, 1);
+				osDelay(15);
+				HIDMouse_moveAndButtonSend(&testMouse, 0, 0, 0, HIDMouse_Left, 1);
+				//sprintf(out, "Send\r\n");
+				//HAL_UART_Transmit(&huart2, (uint8_t*) out, strlen(out), HAL_MAX_DELAY);
+			} else if (res == 2) {
+				HIDMouse_moveAndButtonSend(&testMouse, 0, 0, -10, HIDMouse_NULL, 0);
+				//sprintf(out, "Send\r\n");
+				//HAL_UART_Transmit(&huart2, (uint8_t*) out, strlen(out), HAL_MAX_DELAY);
+			} else if (res == 3) {
+				HIDMouse_moveAndButtonSend(&testMouse, 0, 0, 10, HIDMouse_NULL, 0);
+				//sprintf(out, "Send\r\n");
+				//HAL_UART_Transmit(&huart2, (uint8_t*) out, strlen(out), HAL_MAX_DELAY);
+			}
+			osDelay(15);
+			osMutexRelease(mutexHIDHandle);
+			char msg[100];
+			sprintf(msg, "Prova %d", res);
+			osMessageQueuePut(logsQueueHandle, msg, 0, osWaitForever);
+		}
+
+		osDelay(10);
+
+		if(osMutexGetOwner(mutex1Handle)==settingsTaskHandle){
+			osMutexAcquire(mutex1Handle, osWaitForever);
+			osMutexRelease(mutex1Handle);
+		}
+	}
+
+  /* USER CODE END gestureHandler */
+}
+
+/* USER CODE BEGIN Header_logsHandler */
+/**
+ * @brief Function implementing the logsTask thread.
+ * @param argument: Not used
+ * @retval None
+ */
+/* USER CODE END Header_logsHandler */
+void logsHandler(void *argument)
+{
+  /* USER CODE BEGIN logsHandler */
+	/* Infinite loop */
+
+	fres = SdCard_Init(&sdCard, &FatFs, "LOG.txt");
+	if (fres != FR_OK) {
+		UARTCom_printf(&uartC, "f_mount or f_open error (%d)\n",fres);
+		while (1)
+			;
+	}else
+		UARTCom_printf(&uartC, "SDCard OK\n");
+
+	char message[100];
+	DateTime date;
+	for (;;) {
+		osMessageQueueGet(logsQueueHandle, message, 0, osWaitForever);
+		date = DS3231_getDateTime(&ds3231);
+		fres = SdCard_writeEvent(&sdCard, date, message);
+
+		if (fres == FR_OK) {
+			UARTCom_printf(&uartC, "Scrittura avvenuta con successo %s\n",message);
+		} else {
+			UARTCom_printf(&uartC, "f_sync error (%i)\n",fres);
+		}
+
+		osDelay(1);
+
+		if(osMutexGetOwner(mutex1Handle)==settingsTaskHandle){
+			osMutexAcquire(mutex1Handle, osWaitForever);
+			osMutexRelease(mutex1Handle);
+		}
+	}
+  /* USER CODE END logsHandler */
+}
+
+/* USER CODE BEGIN Header_settingsHandler */
+/**
+* @brief Function implementing the settingsTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_settingsHandler */
+void settingsHandler(void *argument)
+{
+  /* USER CODE BEGIN settingsHandler */
+  /* Infinite loop */
+
+  for(;;)
+  {
+	  osMutexAcquire(mutex1Handle, osWaitForever);
+	  osDelay(1000);
+	  Settings_calibrateMaxSpeedAngle(&settings, &mpu6050Move, &uartC, 1);
+	  Settings_calibrateMaxSpeedAngle(&settings, &mpu6050Move, &uartC, 0);
+	  Settings_calibrateStopAngle(&settings, &mpu6050Move, &uartC);
+	  Settings_setMaxSpeedMouse(&settings, &uartC);
+	  UARTCom_printf(&uartC, "Valori impostati:\n");
+	  UARTCom_printf(&uartC, "Max Speed Angle X: %d\n", (int)settings.maxSpeedAngleX);
+	  UARTCom_printf(&uartC, "Max Speed Angle Y: %d\n", (int)settings.maxSpeedAngleY);
+	  UARTCom_printf(&uartC, "Max Stop Angle: %d\n", (int)settings.maxStopAngle);
+	  UARTCom_printf(&uartC, "Max Mouse Speed: %d\n", settings.maxSpeedMouse);
+	  osMutexRelease(mutex1Handle);
+	  osDelay(1);
+
+
+  }
+  /* USER CODE END settingsHandler */
+}
+
+/* Private application code --------------------------------------------------*/
+/* USER CODE BEGIN Application */
+
+/* USER CODE END Application */
+

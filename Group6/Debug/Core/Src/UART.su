@@ -1,0 +1,4 @@
+../Core/Src/UART.c:41:6:UARTCom_Init	16	static
+../Core/Src/UART.c:50:6:UARTCom_printf	28	static
+../Core/Src/UART.c:66:6:UARTCom_scanf	284	static
+../Core/Src/UART.c:86:6:UARTCom_gets	32	static

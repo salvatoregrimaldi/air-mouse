@@ -1,0 +1,32 @@
+/*
+ * SDCard.h
+ *
+ *  Created on: 13 giu 2022
+ *      Author: duino
+ */
+
+#ifndef INC_SDCARD_H_
+#define INC_SDCARD_H_
+
+	#include <stdio.h>
+	#include <string.h>
+	#include "fatfs.h"
+	#include "spi.h"
+	#include "stm32f4xx.h"
+	#include "Datetime.h"
+
+
+	typedef struct
+	{
+		FATFS* fatFs;
+		FIL fil;
+		char* filename;
+	} SdCard;
+
+	FRESULT _SdCard_setTimestamp(SdCard* sdCard, DateTime dateTime);
+
+	FRESULT SdCard_Init(SdCard* sdCard, FATFS* FatFs, char* filename);
+	FRESULT SdCard_writeEvent(SdCard* sdCard, DateTime dateTime, char * event);
+	FRESULT SdCard_close(SdCard* sdCard);
+
+#endif /* INC_SDCARD_H_ */

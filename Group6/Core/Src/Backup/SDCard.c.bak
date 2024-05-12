@@ -1,0 +1,52 @@
+/*
+ * SDCard.c
+ *
+ *  Created on: 13 giu 2022
+ *      Author: duino
+ */
+
+#include "SDCard.h"
+
+FRESULT _SdCard_setTimestamp(SdCard* sdCard, DateTime dateTime) {
+	FILINFO fno;
+
+	fno.fdate = (WORD) ((((int)dateTime.year - 1980) * 512U) | (int)dateTime.month * 32U | (int)dateTime.dayofmonth);
+	fno.ftime = (WORD) ((int)dateTime.hour * 2048U | (int)dateTime.minutes * 32U | (int)dateTime.seconds / 2U);
+
+	return f_utime(sdCard->filename, &fno);
+}
+
+FRESULT SdCard_Init(SdCard* sdCard, FATFS* fatFs, char* filename){
+	FRESULT fres;
+	sdCard->fatFs=fatFs;
+	sdCard->filename=filename;
+
+
+	fres = f_mount(fatFs, "", 1);
+	if (fres != FR_OK)
+		return fres;
+
+	fres = f_open(&sdCard->fil, sdCard->filename, FA_OPEN_APPEND | FA_WRITE);
+
+	return fres;
+
+}
+
+
+FRESULT SdCard_writeEvent(SdCard* sdCard, DateTime dateTime, char * event){
+	FRESULT fres;
+	char* strDate = DateTime_toString(&dateTime);
+
+	f_printf(&sdCard->fil, "%s -> %s\n", strDate, event);
+	fres=f_sync(&sdCard->fil);
+	if (fres != FR_OK)
+		return fres;
+
+	return _SdCard_setTimestamp(sdCard, dateTime);
+}
+
+FRESULT SdCard_close(SdCard* sdCard){
+	return f_close(&sdCard->fil);
+}
+
+

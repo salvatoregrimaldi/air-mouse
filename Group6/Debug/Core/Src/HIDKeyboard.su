@@ -1,0 +1,6 @@
+../Core/Src/HIDKeyboard.c:39:9:HIDKeyboard_toKeyHex	16	static
+../Core/Src/HIDKeyboard.c:60:6:HIDKeyboard_Init	16	static
+../Core/Src/HIDKeyboard.c:83:6:_HIDKeyboard_releaseKey	16	static
+../Core/Src/HIDKeyboard.c:107:6:_HIDKeyboard_pressKey	32	static
+../Core/Src/HIDKeyboard.c:140:6:_HIDKeyboard_pressAndReleaseKey	16	static
+../Core/Src/HIDKeyboard.c:151:8:HIDKeyboard_sendInput	16	static

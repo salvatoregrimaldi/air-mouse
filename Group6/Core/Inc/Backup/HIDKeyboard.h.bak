@@ -1,0 +1,58 @@
+/*
+ * HIDKeyboard.h
+ *
+ *  Created on: Jun 9, 2022
+ *      Author: duino
+ */
+
+#ifndef INC_HIDKEYBOARD_H_
+#define INC_HIDKEYBOARD_H_
+
+	#include "usbd_def.h"
+
+	typedef enum {
+		HIDKeyboard_ButtonReleased = 0,
+		HIDKeyboard_ButtonPressed = 1
+	} HIDKeyboard_ButtonState;
+
+	typedef enum {
+		HIDKeyboard_NULL = 0,
+		HIDKeyboard_CtrlL = 1,
+		HIDKeyboard_ShiftL = 2,
+		HIDKeyboard_AltL = 3,
+		HIDKeyboard_WinL = 4,
+		HIDKeyboard_CtrlR = 5,
+		HIDKeyboard_ShiftR = 6,
+		HIDKeyboard_AltR = 7,
+		HIDKeyboard_WinR = 8
+	} HIDKeyboard_Button;
+
+	typedef struct {
+		USBD_HandleTypeDef* handler;
+		HIDKeyboard_ButtonState L_CTRL;  /*!< Left CTRL button. This parameter can be a value of @ref TM_USB_HIDDEVICE_Button_t enumeration */
+		HIDKeyboard_ButtonState L_ALT;   /*!< Left ALT button. This parameter can be a value of @ref TM_USB_HIDDEVICE_Button_t enumeration */
+		HIDKeyboard_ButtonState L_SHIFT; /*!< Left SHIFT button. This parameter can be a value of @ref TM_USB_HIDDEVICE_Button_t enumeration */
+		HIDKeyboard_ButtonState L_GUI;   /*!< Left GUI (Win) button. This parameter can be a value of @ref TM_USB_HIDDEVICE_Button_t enumeration */
+		HIDKeyboard_ButtonState R_CTRL;  /*!< Right CTRL button. This parameter can be a value of @ref TM_USB_HIDDEVICE_Button_t enumeration */
+		HIDKeyboard_ButtonState R_ALT;   /*!< Right ALT button. This parameter can be a value of @ref TM_USB_HIDDEVICE_Button_t enumeration */
+		HIDKeyboard_ButtonState R_SHIFT; /*!< Right SHIFT button. This parameter can be a value of @ref TM_USB_HIDDEVICE_Button_t enumeration */
+		HIDKeyboard_ButtonState R_GUI;   /*!< Right GUI (Win) button. This parameter can be a value of @ref TM_USB_HIDDEVICE_Button_t enumeration */
+		uint8_t key1;                      /*!< Key used with keyboard. This can be whatever. Like numbers, letters, everything. */
+		uint8_t key2;                      /*!< Key used with keyboard. This can be whatever. Like numbers, letters, everything. */
+		uint8_t key3;                      /*!< Key used with keyboard. This can be whatever. Like numbers, letters, everything. */
+		uint8_t key4;                      /*!< Key used with keyboard. This can be whatever. Like numbers, letters, everything. */
+		uint8_t key5;                      /*!< Key used with keyboard. This can be whatever. Like numbers, letters, everything. */
+		uint8_t key6;                      /*!< Key used with keyboard. This can be whatever. Like numbers, letters, everything. */
+	} HIDKeyboard;
+
+	void HIDKeyboard_Init(HIDKeyboard* HIDkeyboard, USBD_HandleTypeDef* handler);
+	void _HIDKeyboard_press(HIDKeyboard* HIDkeyboard);
+	void _HIDKeyboard_release(HIDKeyboard* HIDkeyboard);
+	void _HIDKeyboard_pressAndRelease(HIDKeyboard* HIDkeyboard);
+	uint8_t HIDKeyboard_charToKeyCode(char c);
+	int8_t HIDKeyboard_send(HIDKeyboard* HIDkeyboard, HIDKeyboard_Button firstButton, HIDKeyboard_Button secondButton, uint8_t thirdButton, int8_t releaseButtons);
+
+
+
+
+#endif /* INC_HIDKEYBOARD_H_ */

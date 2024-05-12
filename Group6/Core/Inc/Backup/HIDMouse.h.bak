@@ -1,0 +1,39 @@
+/*
+ * HIDMouse.h
+ *
+ *  Created on: Jun 9, 2022
+ *      Author: duino
+ */
+
+#ifndef INC_HIDMOUSE_H_
+#define INC_HIDMOUSE_H_
+	#include "usbd_def.h"
+
+	typedef enum {
+		HIDMouse_ButtonReleased = 0,
+		HIDMouse_ButtonPressed = 1
+	} HIDMouse_ButtonState;
+
+	typedef enum {
+		HIDMouse_NULL = 0,
+		HIDMouse_Left = 1,
+		HIDMouse_Right = 2,
+		HIDMouse_Middle = 3
+	} HIDMouse_Button;
+
+	typedef struct {
+		USBD_HandleTypeDef* handler;
+		HIDMouse_ButtonState leftButton;
+		HIDMouse_ButtonState rightButton;
+		HIDMouse_ButtonState middleButton;
+		int8_t XAxis;
+		int8_t YAxis;
+		int8_t wheel;
+	} HIDMouse;
+
+	void HIDMouse_Init(HIDMouse* HIDmouse, USBD_HandleTypeDef* handler);
+	void _HIDMouse_send(HIDMouse* HIDmouse);
+	int8_t HIDMouse_moveAndButtonSend(HIDMouse* HIDmouse, int8_t X, int8_t Y, int8_t wheel, HIDMouse_Button button, int8_t releaseButtons);
+
+
+#endif /* INC_HIDMOUSE_H_ */

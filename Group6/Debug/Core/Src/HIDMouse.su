@@ -1,0 +1,3 @@
+../Core/Src/HIDMouse.c:39:6:HIDMouse_Init	16	static
+../Core/Src/HIDMouse.c:55:6:_HIDMouse_sendReport	24	static
+../Core/Src/HIDMouse.c:84:8:HIDMouse_sendInput	16	static

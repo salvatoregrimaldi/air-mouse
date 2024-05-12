@@ -1,0 +1,29 @@
+/*
+ * Datetime.h
+ *
+ *  Created on: Jun 5, 2022
+ *      Author: duino
+ */
+
+#ifndef INC_DATETIME_H_
+#define INC_DATETIME_H_
+#define DATE_DIM 20
+#include <stdio.h>
+
+
+typedef struct {
+	int16_t seconds;
+	int16_t minutes;
+	int16_t hour;
+	int16_t dayofweek;
+	int16_t dayofmonth;
+	int16_t month;
+	int16_t year;
+	char _str[DATE_DIM];
+} DateTime;
+
+int8_t DateTime_Init(DateTime* dateTime, int16_t seconds, int16_t minutes, int16_t hour, int16_t dayofweek, int16_t dayofmonth, int16_t month, int16_t year);
+
+char* DateTime_toString(DateTime* dateTime);
+
+#endif /* INC_DATETIME_H_ */

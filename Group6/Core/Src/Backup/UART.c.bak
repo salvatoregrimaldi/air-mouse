@@ -1,0 +1,46 @@
+#include "UART.h"
+#include <string.h>
+#include <stdarg.h>
+#include <stdio.h>
+
+
+void UARTCom_Init(UARTCom* uartC, UART_HandleTypeDef* uartPort){
+	uartC->uartPort=uartPort;
+}
+
+void UARTCom_printf(UARTCom* uartC, const char *fmt, ...){
+	static char buffer[256];
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(buffer, sizeof(buffer), fmt, args);
+	va_end(args);
+
+	int len = strlen(buffer);
+	HAL_UART_Transmit(uartC->uartPort, (uint8_t*) buffer, len, HAL_MAX_DELAY);
+}
+
+void UARTCom_scanf(UARTCom* uartC, const char *fmt, ...){
+	char buffer[256];
+	va_list args;
+	va_start(args, fmt);
+	int i=0;
+	while(i<256){
+		HAL_UART_Receive(uartC->uartPort,(uint8_t*) &buffer[i], sizeof(char), HAL_MAX_DELAY);
+		if(buffer[i]=='\n')
+			break;
+		i++;
+	}
+	vsiscanf(buffer,fmt,args);
+	va_end(args);
+}
+
+void UARTCom_gets(UARTCom* uartC, char *buffer, int8_t maxDim){
+	int i=0;
+	while(i<maxDim-1){
+		HAL_UART_Receive(uartC->uartPort,(uint8_t*) &buffer[i], sizeof(char), HAL_MAX_DELAY);
+		if(buffer[i]=='\n')
+			break;
+		i++;
+	}
+	buffer[i]='\0';
+}

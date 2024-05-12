@@ -1,0 +1,29 @@
+/*
+ * UART.h
+ *
+ *  Created on: Jun 9, 2022
+ *      Author: duino
+ */
+
+#ifndef INC_UART_H_
+#define INC_UART_H_
+
+	#include "stm32f4xx.h"
+
+	typedef struct
+	{
+		UART_HandleTypeDef* uartPort;
+
+
+	} UARTCom;
+
+	void UARTCom_Init(UARTCom* uartC, UART_HandleTypeDef* uartPort);
+
+	void UARTCom_printf(UARTCom* uartC, const char *fmt, ...);
+
+	void UARTCom_scanf(UARTCom* uartC, const char *fmt, ...);
+
+	void UARTCom_gets(UARTCom* uartC, char *buffer, int8_t maxDim);
+
+
+#endif /* INC_UART_H_ */

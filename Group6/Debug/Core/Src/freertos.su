@@ -1,0 +1,8 @@
+../Core/Src/freertos.c:145:10:MAP	24	static
+../Core/Src/freertos.c:171:6:MX_FREERTOS_Init	8	static
+../Core/Src/freertos.c:246:6:StartDefaultTask	16	static
+../Core/Src/freertos.c:266:6:cursorHandler	40	static
+../Core/Src/freertos.c:342:6:gestureHandler	184	static
+../Core/Src/freertos.c:434:6:SDHandler	192	static
+../Core/Src/freertos.c:488:6:calibrationHandler	16	static
+../Core/Src/freertos.c:564:6:HAL_UART_RxCpltCallback	16	static

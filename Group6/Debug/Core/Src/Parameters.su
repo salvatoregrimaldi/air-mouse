@@ -1,0 +1,6 @@
+../Core/Src/Parameters.c:40:6:Param_Init	16	static
+../Core/Src/Parameters.c:53:6:setMaxSpeedValue	24	static
+../Core/Src/Parameters.c:71:6:setMaxSpeedAngle	40	static
+../Core/Src/Parameters.c:136:6:setDeadZones	40	static
+../Core/Src/Parameters.c:184:6:setAccThresh	24	static
+../Core/Src/Parameters.c:202:6:setDateTime	136	static

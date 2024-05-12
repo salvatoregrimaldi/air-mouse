@@ -1,0 +1,109 @@
+/*
+ * ds3231.c
+ *
+ *  Created on: May 16, 2022
+ */
+#include "Ds3231.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+// Convert normal decimal numbers to binary coded decimal
+uint8_t _DS3231_decToBcd(int16_t val) {
+	return (uint8_t) ((val / 10 * 16) + (val % 10));
+}
+// Convert binary coded decimal to normal decimal numbers
+int16_t _DS3231_bcdToDec(uint8_t val) {
+	return (int16_t) ((val / 16 * 10) + (val % 16));
+}
+
+DateTime DS3231_convertRawDTtoDT(uint8_t* gDateTime) {
+	DateTime ret;
+
+	DateTime_Init(&ret,
+			_DS3231_bcdToDec(gDateTime[0]),
+			_DS3231_bcdToDec(gDateTime[1]),
+			_DS3231_bcdToDec(gDateTime[2]),
+			_DS3231_bcdToDec(gDateTime[3]),
+			_DS3231_bcdToDec(gDateTime[4]),
+			_DS3231_bcdToDec(gDateTime[5]),
+			_DS3231_bcdToDec(gDateTime[6]) + 2000);
+
+	return ret;
+}
+
+float DS3231_convertRawTtoT(uint8_t* temp){
+	return ((temp[0]) + (temp[1] >> 6) / 4.0);
+}
+
+void DS3231_Init(DS3231 *ds3231, I2C_HandleTypeDef *i2cPort, uint16_t address) {
+	ds3231->address = address;
+	ds3231->i2cPort = i2cPort;
+
+}
+
+uint8_t* DS3231_getRawDateTime(DS3231 *ds3231){
+	return ds3231->_rawDateTime;
+}
+uint8_t* DS3231_getRawTemp(DS3231 *ds3231){
+	return ds3231->_rawTemp;
+}
+
+void DS3231_setDateTime(DS3231 *ds3231, DateTime dateTime) {
+	uint8_t sDateTime[7];
+	sDateTime[0] = _DS3231_decToBcd(dateTime.seconds);
+	sDateTime[1] = _DS3231_decToBcd(dateTime.minutes);
+	sDateTime[2] = _DS3231_decToBcd(dateTime.hour);
+	sDateTime[3] = _DS3231_decToBcd(dateTime.dayofweek);
+	sDateTime[4] = _DS3231_decToBcd(dateTime.dayofmonth);
+	sDateTime[5] = _DS3231_decToBcd(dateTime.month);
+	sDateTime[6] = _DS3231_decToBcd(dateTime.year % 2000);
+
+	HAL_I2C_Mem_Write(ds3231->i2cPort, ds3231->address, 0x00, 1, sDateTime, 7, 1000);
+
+}
+
+void DS3231_setDateTimeIT(DS3231 *ds3231, DateTime dateTime) {
+
+	ds3231->_rawDateTime[0] = _DS3231_decToBcd(dateTime.seconds);
+	ds3231->_rawDateTime[1] = _DS3231_decToBcd(dateTime.minutes);
+	ds3231->_rawDateTime[2] = _DS3231_decToBcd(dateTime.hour);
+	ds3231->_rawDateTime[3] = _DS3231_decToBcd(dateTime.dayofweek);
+	ds3231->_rawDateTime[4] = _DS3231_decToBcd(dateTime.dayofmonth);
+	ds3231->_rawDateTime[5] = _DS3231_decToBcd(dateTime.month);
+	ds3231->_rawDateTime[6] = _DS3231_decToBcd(dateTime.year % 2000);
+
+	HAL_I2C_Mem_Write_IT(ds3231->i2cPort, ds3231->address, 0x00, 1, ds3231->_rawDateTime, 7);
+
+}
+
+DateTime DS3231_getDateTime(DS3231 *ds3231) {
+	DateTime ret;
+	uint8_t gDateTime[7];
+
+	HAL_I2C_Mem_Read(ds3231->i2cPort, ds3231->address, 0x00, 1, gDateTime, 7, 1000);
+
+	ret=DS3231_convertRawDTtoDT(gDateTime);
+
+	return ret;
+}
+
+void DS3231_getDateTimeIT(DS3231 *ds3231) {
+
+	HAL_I2C_Mem_Read_IT(ds3231->i2cPort, ds3231->address, 0x00, 1, ds3231->_rawDateTime, 7);
+
+}
+
+float DS3231_getTemp(DS3231 *ds3231) {
+	uint8_t temp[2];
+
+	HAL_I2C_Mem_Read(ds3231->i2cPort, ds3231->address, 0x11, 1, temp, 2, 1000);
+
+	return DS3231_convertRawTtoT(temp);
+}
+
+void DS3231_getTempIT(DS3231 *ds3231){
+	HAL_I2C_Mem_Read_IT(ds3231->i2cPort, ds3231->address, 0x11, 1, ds3231->_rawTemp, 2);
+}
+
+
+

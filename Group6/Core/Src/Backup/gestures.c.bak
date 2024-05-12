@@ -1,0 +1,40 @@
+/*
+ * gestures.c
+ *
+ *  Created on: Jun 24, 2022
+ *      Author: andre
+ */
+
+
+#include <string.h>
+#include "gestures.h"
+#include "eml_trees.h"
+#include "usart.h"
+#include "gesture.h"
+#define length 300
+float values[length];
+
+uint8_t recognize_gesture(MPU6050* gy521, uint8_t num_samples){
+
+
+	uint8_t samples_read = 0;
+	uint8_t i = 0;
+	while(samples_read < num_samples){
+		MPU6050_readAll(gy521);
+		samples_read++;
+
+		values[i+0]=gy521->Ax;
+		values[i+1]=gy521->Ay;
+	    values[i+2]=gy521->Az;
+		values[i+3]=gy521->Gx;
+		values[i+4]=gy521->Gy;
+		values[i+5]=gy521->Gz;
+		i+=6;
+
+		HAL_Delay(10);
+	}
+	uint8_t predicted_gesture = gesture_predict(values, length);
+	return predicted_gesture;
+}
+
+
